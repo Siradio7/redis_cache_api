@@ -1,0 +1,23 @@
+{
+  "name": "redis_cache_api",
+  "version": "1.0.0",
+  "description": "REST API demonstrating Redis caching, cache invalidation and TTL with Node.js, Express and MySQL.",
+  "license": "ISC",
+  "author": "Mamadou Siradiou Diallo",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mysql2": "^3.23.3",
+    "redis": "^6.2.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
