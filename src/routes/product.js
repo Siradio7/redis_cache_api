@@ -1,7 +1,19 @@
 import express from "express"
-import { findById, updateById } from "../services/product.js"
+import { create, findById, updateById } from "../services/product.js"
 
 const productRouter = express.Router()
+
+productRouter.post("/", async (req, res) => {
+    const productData = req.body
+
+    if (!productData.name || !productData.description || productData.price === undefined) {
+        return res.status(400).json({ error: "Missing required fields" })
+    }
+
+    const productCreated = await create(productData)
+
+    return res.status(201).json(productCreated)
+})
 
 productRouter.get("/:id", async (req, res) => {
     const { id } = req.params
