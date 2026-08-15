@@ -15,8 +15,12 @@ const findById = async (id) => {
         const cachedProduct = await redisClient.get(redisProductKey)
 
         if (cachedProduct) {
+            await redisClient.incr("stats:cache:hits")
+
             return JSON.parse(cachedProduct)
         }
+        
+        await redisClient.incr("stats:cache:misses")
     } catch (error) {
         console.error("Error interacting with Redis:", error)
     }
