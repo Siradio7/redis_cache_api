@@ -1,5 +1,5 @@
 import express from "express"
-import { create, findById, updateById } from "../services/product.js"
+import { create, findById, updateById, deleteById } from "../services/product.js"
 
 const productRouter = express.Router()
 
@@ -36,6 +36,17 @@ productRouter.put("/:id", async (req, res) => {
     }
 
     return res.status(200).json({ message: "Product updated successfully" })
+})
+
+productRouter.delete("/:id", async (req, res) => {
+    const { id } = req.params
+    const isDeleted = await deleteById(id)
+
+    if (!isDeleted) {
+        return res.status(404).json({ error: "Product not found" })
+    }
+
+    return res.status(204).send()
 })
 
 export default productRouter
