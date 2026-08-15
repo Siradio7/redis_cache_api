@@ -1,6 +1,17 @@
 import pool from "./mysql.js"
 
+const create = async (productData) => {
+    const { name, description, price } = productData
+    const [result] = await pool.query(
+        "INSERT INTO products (name, description, price) VALUES (?, ?, ?)",
+        [name, description, price]
+    )
+
+    return result.insertId
+}
+
 const findById = async (id) => {
+    console.log(`MySQL: finding product ${id}`)
     const [rows] = await pool.query("SELECT * FROM products WHERE id = ?", [id])
 
     return rows[0] ?? null
@@ -16,4 +27,4 @@ const updateById = async (id, productData) => {
     return result.affectedRows > 0
 }
 
-export { findById, updateById }
+export { create, findById, updateById }
