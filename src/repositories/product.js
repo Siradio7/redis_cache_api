@@ -6,4 +6,14 @@ const findById = async (id) => {
     return rows[0] ?? null
 }
 
-export { findById }
+const updateById = async (id, productData) => {
+    const { name, description, price } = productData
+    const [result] = await pool.query(
+        "UPDATE products SET name = ?, description = ?, price = ? WHERE id = ?",
+        [name, description, price, id]
+    )
+
+    return result.affectedRows > 0
+}
+
+export { findById, updateById }
