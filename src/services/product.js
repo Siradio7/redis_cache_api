@@ -1,5 +1,5 @@
 import redisClient from "../cache/redis.js"
-import { findById as findProductById } from "../repositories/product.js"
+import { findById as findProductById, updateById as updateProductById } from "../repositories/product.js"
 
 const findById = async (id) => {
     const redisProductKey = `product:${id}`
@@ -31,4 +31,20 @@ const findById = async (id) => {
     return product
 }
 
-export { findById }
+const updateById = async (id, productData) => {
+    const isUpdated = await updateProductById(id, productData)
+
+    if (isUpdated) {
+        const redisProductKey = `product:${id}`
+
+        try {
+            await redisClient.del(redisProductKey)
+        } catch (error) {
+            console.error("Error deleting from Redis:", error)
+        }
+    }
+
+    return isUpdated
+}
+
+export { findById, updateById }
