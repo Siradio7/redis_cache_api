@@ -1,5 +1,6 @@
 services:
   api:
+    container_name: rc_api
     build: .
     ports:
       - "3000:3000"
@@ -15,9 +16,11 @@ services:
       - redis
       - db
   redis:
+    container_name: rc_redis
     image: redis:7-alpine
 
   db:
+    container_name: rc_db
     image: mysql:8
     restart: always
     environment:
@@ -27,6 +30,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
+      - ./src/database/init.sql:/docker-entrypoint-initdb.d/init.sql
     
 volumes:
   db_data:
