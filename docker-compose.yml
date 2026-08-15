@@ -7,6 +7,7 @@ services:
     environment:
       REDIS_HOST: ${REDIS_HOST}
       REDIS_PORT: ${REDIS_PORT}
+      CACHE_TTL: ${CACHE_TTL}
       MYSQL_HOST: db
       MYSQL_PORT: 3306d
       MYSQL_DATABASE: ${MYSQL_DATABASE}
