@@ -26,4 +26,10 @@ const updateById = async (id, productData) => {
     return result.affectedRows > 0
 }
 
-export { create, findById, updateById }
+const deleteById = async (id) => {
+    const [result] = await pool.query("DELETE FROM products WHERE id = ?", [id])
+
+    return result.affectedRows > 0
+}
+
+export { create, findById, updateById, deleteById }
