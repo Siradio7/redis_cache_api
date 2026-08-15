@@ -11,6 +11,7 @@ const create = async (productData) => {
 }
 
 const findById = async (id) => {
+    await new Promise(resolve => setTimeout(resolve, 50))
     const [rows] = await pool.query("SELECT * FROM products WHERE id = ?", [id])
 
     return rows[0] ?? null
