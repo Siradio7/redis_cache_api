@@ -1,5 +1,12 @@
 import redisClient from "../cache/redis.js"
-import { findById as findProductById, updateById as updateProductById } from "../repositories/product.js"
+import { create as createProduct, findById as findProductById, updateById as updateProductById } from "../repositories/product.js"
+
+const create = async (productData) => {
+    const productId = await createProduct(productData)
+    const productCreated = await findProductById(productId)
+
+    return productCreated
+}
 
 const findById = async (id) => {
     const redisProductKey = `product:${id}`
@@ -47,4 +54,4 @@ const updateById = async (id, productData) => {
     return isUpdated
 }
 
-export { findById, updateById }
+export { create, findById, updateById }
