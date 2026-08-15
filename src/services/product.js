@@ -9,6 +9,10 @@ const create = async (productData) => {
 }
 
 const findById = async (id) => {
+    if (process.env.CACHE_ENABLED !== "true") {
+        return await findProductById(id)
+    }
+
     const redisProductKey = `product:${id}`
 
     try {
@@ -45,7 +49,7 @@ const findById = async (id) => {
 const updateById = async (id, productData) => {
     const isUpdated = await updateProductById(id, productData)
 
-    if (isUpdated) {
+    if (isUpdated && process.env.CACHE_ENABLED === "true") {
         const redisProductKey = `product:${id}`
 
         try {
@@ -61,7 +65,7 @@ const updateById = async (id, productData) => {
 const deleteById = async (id) => {
     const isDeleted = await deleteProductById(id)
 
-    if (isDeleted) {
+    if (isDeleted && process.env.CACHE_ENABLED === "true") {
         const redisProductKey = `product:${id}`
 
         try {
