@@ -1,12 +1,8 @@
 import express from "express"
-import { getStats } from "../services/cache.js"
+import { getCacheStats } from "../controllers/cache.js"
 
 const cacheRouter = express.Router()
 
-cacheRouter.get("/stats", async (req, res) => {
-    const stats = await getStats()
-    
-    return res.status(200).json(stats)
-})
+cacheRouter.get("/stats", getCacheStats)
 
 export default cacheRouter
