@@ -1,5 +1,5 @@
 import redisClient from "../cache/redis.js"
-import crypto from "node:crypto"
+import { acquireLock, releaseLock } from "../cache/lock.js"
 import {
     create as createProduct,
     findById as findProductById,
@@ -27,7 +27,6 @@ const findById = async (id) => {
 
     const redisProductKey = `product:${id}`
     const redisLockKey = `lock:product:${id}`
-    const lockValue = crypto.randomUUID()
 
     try {
         const cachedProduct = await redisClient.get(redisProductKey)
@@ -40,16 +39,9 @@ const findById = async (id) => {
 
         await redisClient.incr("stats:cache:misses")
 
-        const lockAcquired = await redisClient.set(
-            redisLockKey,
-            lockValue,
-            {
-                NX: true,
-                EX: LOCK_TTL
-            }
-        )
+        const lockValue = await acquireLock(redisLockKey, LOCK_TTL)
 
-        if (lockAcquired) {
+        if (lockValue) {
             try {
                 const product = await findProductById(id)
 
@@ -67,11 +59,7 @@ const findById = async (id) => {
 
                 return product
             } finally {
-                const currentLockValue = await redisClient.get(redisLockKey)
-
-                if (currentLockValue === lockValue) {
-                    await redisClient.del(redisLockKey)
-                }
+                await releaseLock(redisLockKey, lockValue)
             }
         }
 
